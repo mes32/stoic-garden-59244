@@ -5,6 +5,7 @@ A simple API built in Clojure
 ## Dependencies
 
 - Git [git-scm.com](https://git-scm.com/)
+- Java [oracle.com/java/](https://www.oracle.com/java/)
 - Clojure [clojure.org](https://clojure.org/)
 - Leiningen [leiningen.org](https://leiningen.org/)
 - Heroku CLI [devcenter.heroku.com/articles/heroku-cli](https://devcenter.heroku.com/articles/heroku-cli)
