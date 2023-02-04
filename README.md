@@ -1,32 +1,43 @@
 # stoic-garden-59244
 
-FIXME: description
+A simple API built in Clojure
+
+## Dependencies
+
+- Git [git-scm.com](https://git-scm.com/)
+- Clojure [clojure.org](https://clojure.org/)
+- Leiningen [leiningen.org](https://leiningen.org/)
+- Heroku CLI [devcenter.heroku.com/articles/heroku-cli](https://devcenter.heroku.com/articles/heroku-cli)
 
 ## Installation
 
-Download from http://example.com/FIXME.
+```bash
+# Clone this repository
+git clone https://github.com/mes32/stoic-garden-59244.git
+```
 
 ## Usage
 
-FIXME: explanation
+### In the Terminal
 
-    $ java -jar stoic-garden-59244-0.1.0-standalone.jar [args]
+```bash
+# Start the REPL
+lein repl
+```
 
-## Options
+### In the REPL
 
-FIXME: listing of options this app accepts.
+```clojure
+;; Load requirements
+(require 'stoic-garden-59244.core)
 
-## Examples
+;; Start the server
+(def server (stoic-garden-59244.core/-main))
+```
 
-...
+## References
 
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+- [https://devcenter.heroku.com/articles/getting-started-with-clojure?singlepage=true](https://devcenter.heroku.com/articles/getting-started-with-clojure?singlepage=true)
 
 ## License
 
