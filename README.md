@@ -36,6 +36,34 @@ lein repl
 (def server (stoic-garden-59244.core/-main))
 ```
 
+### Heroku Setup
+
+```bash
+# 1. Login and initialize the current project for use with heroku
+cd stoic-garden-59244
+heroku login
+heroku create
+
+# 2. Push local changes to heroku
+git push heroku main
+
+# 3. Scale up the remote server on heroku
+heroku ps:scale web=1
+
+# 4. Open a browser window pointed at the remote server
+heroku open
+```
+
+### Other Commands
+
+```bash
+# Display a live tail of the remote server logs
+heroku logs --tail
+
+# Scale down the remote server
+heroku ps:scale web=0
+```
+
 ## References
 
 - [https://devcenter.heroku.com/articles/getting-started-with-clojure?singlepage=true](https://devcenter.heroku.com/articles/getting-started-with-clojure?singlepage=true)
