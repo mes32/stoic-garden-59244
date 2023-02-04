@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/stoic-garden-59244.jar clojure.main -m stoic-garden-59244.core
