@@ -7,7 +7,12 @@
             [ring.adapter.jetty :as jetty]
             [environ.core :refer [env]]))
 
-(def plants
+(def plant-form-factors #{:BUSH :SEED :TREE})
+
+;; TODO - move this inside plants object
+(def last-plant-id (atom 5))
+
+(def plants (atom
   [{:id 1
     :name "Apple"
     :form-factor :TREE
@@ -37,12 +42,18 @@
     :form-factor :TREE
     :emoji "🍒"
     :quantity 4
-    :price 160.00}])
+    :price 160.00}]))
+
+(defn- get-plant [id-string]
+  (let [id (some->> id-string (re-find #"\d+") Long/parseLong)
+        plant (->> @plants (filter #(= (:id %) id)) first)]
+    plant))
 
 (defn splash []
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body "<h1>Hello World!!!</h1>"})
+   :body (str "<h1>Hello World!</h1>"
+              "<p>--stoic-garden-59244</p>")})
 
 (defroutes app
   (GET "/" []
@@ -50,15 +61,19 @@
   (GET "/plant" []
        {:status 200
         :headers {"Content-Type" "application/json"}
-        :body (json/generate-string plants)})
+        :body (json/generate-string @plants)})
   (GET "/plant/:id" [id]
-       (let [id-parsed (some->> id (re-find #"\d+") Long/parseLong)
-             plant (->> plants (filter #(= (:id %) id-parsed)) first)]
+       (let [plant (get-plant id)]
          (if plant
            {:status 200
             :headers {"Content-Type" "application/json"}
             :body (json/generate-string plant)}
            (route/not-found (slurp (io/resource "404.html"))))))
+  (DELETE "/plant/:id" [id]
+          (let [id-long (some->> id (re-find #"\d+") Long/parseLong)]
+            (swap! plants (fn [p] (remove #(= (:id %) id-long) p)))
+            {:status 204
+             :headers {"Content-Type" "application/json"}}))
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
 
