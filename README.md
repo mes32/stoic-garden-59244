@@ -47,7 +47,7 @@ Inserts a new plant into the app state. Returns status 201 if successful or stat
 http post http://localhost:5000/plant name="Tomatoes" form-factor="SEED" emoji="🍅" price="1.2" quantity="30"
 ```
 
-```json
+```
 HTTP/1.1 201 Created
 Content-Length: 0
 Content-Type: application/json
@@ -63,7 +63,7 @@ Returns a list of all plants currently in the app state.
 http get http://localhost:5000/plant
 ```
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 445
 Content-Type: application/json
@@ -122,7 +122,7 @@ Returns the plant with `:id` from the app state or returns a 404 status if no pl
 http get http://localhost:5000/plant/2
 ```
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 90
 Content-Type: application/json
@@ -147,7 +147,7 @@ Update plant with `:id` in the app state. Requests only need to include the fiel
 http patch http://localhost:5000/plant/3 quantity="62"
 ```
 
-```json
+```
 HTTP/1.1 200 OK
 Content-Length: 0
 Date: Sat, 18 Feb 2023 17:38:28 GMT
@@ -162,7 +162,7 @@ Removes all plants with `:id` from the app state. Returns status 204 on success 
 http delete http://localhost:5000/plant/4
 ```
 
-```json
+```
 HTTP/1.1 204 No Content
 Content-Type: application/json
 Date: Sat, 18 Feb 2023 17:14:33 GMT
