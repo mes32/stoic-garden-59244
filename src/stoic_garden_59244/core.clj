@@ -1,6 +1,6 @@
 (ns stoic-garden-59244.core
   (:require [cheshire.core :as json]
-            [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
+            [compojure.core :refer [defroutes GET PATCH PUT POST DELETE ANY]]
             [compojure.handler :refer [site]]
             [compojure.route :as route]
             [clojure.java.io :as io]
@@ -10,7 +10,7 @@
 (def plant-form-factors #{:BUSH :SEED :TREE})
 
 (defn- parse-double [input-string]
-  (some->> input-string (re-find #"\d+") Double/parseDouble))
+  (some->> input-string (re-find #"\d+(.?\d+)?") first Double/parseDouble))
 
 (defn- parse-form-factor [input-string]
   (some-> input-string clojure.string/upper-case keyword plant-form-factors))
@@ -83,6 +83,18 @@
        (filter #(= (:id %) (parse-long id-string)))
        first))
 
+(defn- compose-new-plant [plant request-plant]
+  (let [requested-changes (into {} (filter second request-plant))]
+    (merge plant requested-changes)))
+
+(defn- update-plant! [id-string new-plant]
+  (swap! plants
+         (fn [plants-map]
+           (assoc plants-map :list (map #(if-not (= (:id %) (parse-long id-string))
+                                           %
+                                           new-plant)
+                                        (:list plants-map))))))
+
 (defn splash []
   {:status 200
    :headers {"Content-Type" "text/html"}
@@ -113,6 +125,20 @@
             :headers {"Content-Type" "application/json"}
             :body (json/generate-string plant)}
            (route/not-found (slurp (io/resource "404.html"))))))
+  (PATCH "/plant/:id" [id]
+         (fn [request]
+           (let [plant (get-plant id)
+                 request-plant (new-plant (slurp (:body request)))
+                 new-plant (compose-new-plant plant request-plant)]
+             (if plant
+               (if (valid-plant? new-plant)
+                 (do
+                   (update-plant! id new-plant)
+                   {:status 200})
+                 {:status 422
+                  :headers {"Content-Type" "application/json"}
+                  :body (json/generate-string {:message "Invalid plant params."})})
+               {:status 404}))))
   (DELETE "/plant/:id" [id]
           (do
             (swap! plants
